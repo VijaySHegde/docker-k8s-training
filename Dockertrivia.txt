@@ -1,0 +1,132 @@
+Dockers
+Part A
+1.	With minimal possible layers to install WebServices and expose appropriate http port for accessing 
+
+
+•	I have set up a repo for the sample node-app
+ 
+•	Cloned the git repo onto my Ubuntu machine 
+•	Using git clone https://github.com/ramyahd/K8-training.git Command
+•	My repo has been successfully imported inside my Ubuntu machine
+•	This is the repo inside my Ubuntu machine
+
+ 
+
+•	I have to start building the file now as a next step
+•	Command to build the node.js application is: docker build –t ramya/node-web-app .
+
+ 
+
+•	Check for the built image using docker ps command
+•	After that we have to run a container from the image we have built
+Command to run is: docker run –p 49160:8080 –d ramya/node-web-app
+-p means we are publishing the port
+External port is 49160 and internal is 8080
+-d option specifies that we are running the container in the dettached mode which keeps the container up and running always
+•	After running the container we can check for the status using docker ps –a command
+  
+•	Also we can check for the logs of the container using docker logs <container_id>
+•	Now to go inside the container we can use the command 
+Docker exec –it <container_id> /bin/bash
+•	Now to check if the node.js application is running we can issue the command 
+curlhost –i portnumber which gives the http status as OK
+
+
+
+
+
+ 
+
+
+
+
+
+
+2.	You are trying to start a Docker container and it is failing to start – what according to you are possible causes 
+
+Answer:
+1.	When port is already allocated to some other container
+ 
+We get the error as port is already allocated
+
+2.	When there is not enough space on the device then we will get this error
+3.	When Docker daemon stopped working.
+4.	When user does not have enough permissions to the directory
+
+
+
+
+
+Shell
+1.	Using shell command search for a particular pattern (of your choice) to search Docker logs using awk command 
+Awk command can be used to find a particular pattern in logs
+•	Ran the command docker logs | awk –e ‘{print $0}’
+To get the logs of the particular container
+ 
+ 
+
+
+2.	Execute a shell command inside the container to search for a specific file present in the container 
+
+For finding the file ran the command find /  name demo.txt
+The command tells that , We are searching the directory for demo.txt file which have the name 
+ 
+
+Tried to execute the find command using shell script
+ 
+
+Find command to search in the particular container 
+Docker exec –it find / -name demo.txt
+ 
+
+   If we want to get an interactive terminal, run the same command as follows.
+        docker exec –it <container name> find / -name <filename> /bin/bash
+
+
+Jenkins
+Part A
+1.	There is a Jenkins pipeline failure the failure error at the outset suggest that build has failed and one of the tool used for the build is running inside the container – what are the commands you will use for debugging the issue 
+
+•	docker stats <container id> --> when we are using any metrics, and they show how the error has occurred
+
+•	docker logs <container id> --> basic command which shows all input output and errors of a container
+
+•	docker exec -it <container_id> /bin/bash -->To go inside a container and debug
+
+•	docker commit <container_id> my-broken-container && docker run -it my-broken-container /bin/bash --> if we cannot really start a container
+
+•	docker cp <container_id>:/pathinserver /local-path --> to save the container log locally and debug the issue.
+
+
+2.	There is a build failure due to connectivity issue with one of the tools – what actions you will take to narrow down the issue 
+
+1.	Build failure analyser to analyse the exact issue.
+2.	Checking whether the credentials are correct and properly configured
+3.	Checking whether the required plugins are correctly installed and configured properly
+4.	Check whether the api’s are working correctly
+5.	Check whether the configured secret-token got expired
+
+	
+
+3.	As part of part of Jenkins pipeline build process assume that application is containerized and image needs to be pushed to repository, However there is a failure to indicate that image push has failed. What are the possible reasons for the failure 
+1.	Authentication issue
+2.	Wrong tags being provided
+3.	Access denied to docker hub
+4.	Docker push halts without an error because of incorrect urls/image being timed out--> restarting docker helps sometime
+5.	 Docker push can fail if we provide an improper secret_key/not providing any secret_key in the configuration
+6.	In the Jenkins credentials, credentials might not be added properly
+7.	In Jenkins file the stage may not be correct (syntax errors) or the proper credential name not specified
+8.	Directly using the login credentials, without using "with credentials"
+9.	Registry URL can be incorrect
+10.	Docker pipeline plugin may not be installed.
+
+	
+
+4.	Write a shell script to setup git repo, docker build, push image to docker repository 
+http://52.66.70.3:8080/job/Docker-job/
+
+ 
+
+Jenkinsfile is written in the https://github.com/ramyahd/K8-training.git repository
+ 
+Success message from the Jenkins job after running the container successfully on the port
